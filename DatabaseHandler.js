@@ -52,6 +52,23 @@ class Database {
         await this.connection.execute(query, queryValues);
     }
 
+    async createTable(table, columns) {
+        await this.connect();
+        const checkTableQuery = `SHOW TABLES LIKE ?`;
+        const [tables] = await this.connection.execute(checkTableQuery, [table]);
+        if (tables.length > 0) {
+            return;
+        }
+        
+        const columnDefinitions = Object.entries(columns)
+            .map(([column, type]) => `${column} ${type}`)
+            .join(', ');
+        
+        const query = `CREATE TABLE ?? (${columnDefinitions})`;
+        const values = [table];
+        await this.connection.execute(query, values);
+    }
+
     async close() {
         if (this.connection) {
             await this.connection.end();
