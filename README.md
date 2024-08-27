@@ -1,6 +1,6 @@
 # 📦 MySQLHandler
 
-Um pequeno handler de conexão e manipulação de dados em MySQL usando Node.js. Este handler oferece métodos simples para conectar-se ao banco de dados, inserir, atualizar, excluir e buscar dados.
+Um pequeno handler de conexão e manipulação de dados em MySQL usando Node.js. Este handler oferece métodos simples para conectar-se ao banco de dados, criar tabelas, inserir, atualizar, excluir e buscar dados.
 
 ## 🚀 Funcionalidades
 
@@ -9,6 +9,7 @@ Um pequeno handler de conexão e manipulação de dados em MySQL usando Node.js.
 - **🔄 Atualização de Dados**: Atualize registros existentes com base em condições específicas.
 - **❌ Exclusão de Dados**: Remova registros do banco de dados.
 - **🔍 Consulta de Dados**: Busque registros específicos com base em colunas e valores.
+- **🆕 Criação de Tabelas**: Crie novas tabelas no banco de dados.
 
 ## 📚 Instalação
 
@@ -31,13 +32,25 @@ const dbConfig = {
     port: 3306,
     user: 'root',
     password: 'password',
-    database: 'discord_bot',
+    database: 'discord_bot'
 };
 
 const db = new Database(dbConfig);
 ```
 
-### 2. Inserir um Novo Registro
+### 2. Criar uma Nova Tabela
+
+```javascript
+const columns = {
+    user_id: 'VARCHAR(255) PRIMARY KEY',
+    username: 'VARCHAR(255)',
+    active: 'BOOLEAN'
+};
+
+await db.createTable('users', columns);
+```
+
+### 3. Inserir um Novo Registro
 
 ```javascript
 const data = {
@@ -49,26 +62,26 @@ const data = {
 await db.insert('users', data);
 ```
 
-### 3. Atualizar um Registro
+### 4. Atualizar um Registro
 
 ```javascript
 await db.update('users', 'active', true, 'user_id', '123456789');
 ```
 
-### 4. Excluir um Registro
+### 5. Excluir um Registro
 
 ```javascript
 await db.delete('users', 'user_id', '123456789');
 ```
 
-### 5. Buscar um Registro
+### 6. Buscar um Registro
 
 ```javascript
 const user = await db.get('users', 'user_id', '123456789');
 console.log(user);
 ```
 
-### 6. Fechar Conexão
+### 7. Fechar Conexão
 
 ```javascript
 await db.close();
@@ -81,14 +94,23 @@ const Database = require('./Database');
 
 const dbConfig = {
     host: 'localhost',
+    port: 3306,
     user: 'root',
     password: 'password',
-    database: 'discord_bot'
+    database: 'database'
 };
 
 const db = new Database(dbConfig);
 
 (async () => {
+    // Criar uma nova tabela
+    const columns = {
+        user_id: 'VARCHAR(255) PRIMARY KEY',
+        username: 'VARCHAR(255)',
+        active: 'BOOLEAN'
+    };
+    await db.createTable('users', columns);
+
     // Inserir um novo usuário
     const data = {
         user_id: '123456789',
