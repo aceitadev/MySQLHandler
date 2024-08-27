@@ -41,6 +41,17 @@ class Database {
         await this.connection.execute(query, values);
     }
 
+    async insert(table, data) {
+        await this.connect();
+        const columns = Object.keys(data).join(', ');
+        const placeholders = Object.keys(data).map(() => '?').join(', ');
+        const values = Object.values(data);
+
+        const query = `INSERT INTO ?? (${columns}) VALUES (${placeholders})`;
+        const queryValues = [table, ...values];
+        await this.connection.execute(query, queryValues);
+    }
+
     async close() {
         if (this.connection) {
             await this.connection.end();
