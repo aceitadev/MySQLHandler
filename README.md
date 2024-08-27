@@ -28,9 +28,10 @@ Um pequeno handler de conexão e manipulação de dados em MySQL usando Node.js.
 ```javascript
 const dbConfig = {
     host: 'localhost',
+    port: 3306,
     user: 'root',
     password: 'password',
-    database: 'discord_bot'
+    database: 'discord_bot',
 };
 
 const db = new Database(dbConfig);
@@ -39,7 +40,13 @@ const db = new Database(dbConfig);
 ### 2. Inserir um Novo Registro
 
 ```javascript
-await db.set('users', 'username', 'john_doe');
+const data = {
+    user_id: '123456789',
+    username: 'john_doe',
+    active: true
+};
+
+await db.insert('users', data);
 ```
 
 ### 3. Atualizar um Registro
@@ -83,7 +90,12 @@ const db = new Database(dbConfig);
 
 (async () => {
     // Inserir um novo usuário
-    await db.set('users', 'user_id', '123456789');
+    const data = {
+        user_id: '123456789',
+        username: 'john_doe',
+        active: true
+    };
+    await db.insert('users', data);
 
     // Atualizar o status de um usuário
     await db.update('users', 'active', true, 'user_id', '123456789');
